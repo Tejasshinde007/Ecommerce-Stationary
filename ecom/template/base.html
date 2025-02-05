@@ -1,0 +1,23 @@
+{% load static %}
+{% include "header.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '{css/home.css}' %}">
+{% endblock css %}
+
+{% block logincss %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock logincss %}
+
+
+{% block cart %}
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock cart %}
+
+
+
+{% block main %}
+
+{% endblock main %}
+
+{% include "footer.html" %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static '{css/home.css}' %}">
+{% endblock css %}
+
+{% block main %}
+
+<div class="book-selector" >
+    <h1>Select By Standard</h1>
+    <label for="book-type">Choose By Standard:</label>
+    <select id="book-type" onchange="location = this.value;">
+        <option value="#">--Select--</option>
+        <option value="/lkgukg/3/">Nursary-UKG</option>
+        <option value="/firsttofifth/4/">1st-5th</option>
+        <option value="/sixthtotenth/5/">6th-10</option>
+    </select>
+</div>
+
+
+<h1>Nursery - UKG</h1>
+<div class="container2"> 
+    {% for i in lkgukg %}
+      
+    
+    <div class="homepro">
+        <img src="{{i.pimage.url}}">
+            <p style="font-weight: bold;">{{i.pname}}</p>
+            <p class="card-text">  <strong>Price:</strong> ₹ {{i.offer_price}}$  <del>₹{{i.price}}</del>  </p>
+            <p class="card-text">  <strong>Details:</strong>  {{i.description}}  </p>
+            <a href="/product_details/{{i.id}}/"><button>ADD TO CART</button></a> 
+            
+    </div>
+    {% endfor %}
+    </div>
+  
+  
+  
+  
+      </div><br><br><br><br>
+
+{% endblock main %}

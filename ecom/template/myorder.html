@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#ECE9E6;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-header img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-header .info {
+            margin-left: 20px;
+        }
+
+        .profile-header .info h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .profile-header .info h2 {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #007bff;
+        }
+
+        .profile-header .info .ranking {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .tabs {
+            margin-top: 20px;
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tabs a {
+            text-decoration: none;
+            padding: 10px 20px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .tabs a.active {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .content {
+            margin-top: 20px;
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .content table th, .content table td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .work-links, .skills {
+            margin-top: 20px;
+        }
+
+        .work-links a, .skills span {
+            display: block;
+            color: #007bff;
+            text-decoration: none;
+            margin: 5px 0;
+        }
+
+        .edit-button {
+            background: #f4f4f9;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .edit-button:hover {
+            background: #e7e7ef;
+        }
+        .content {
+            margin-top: 20px;
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .content table th, .content table td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-history img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .edit-button {
+            background: #f4f4f9;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .edit-button1 {
+            background: #f4f4f9;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+        }
+
+        .edit-button:hover {
+            background: #e7e7ef;
+        }
+        .edit-button1:hover {
+            background: #e7e7ef;
+        }
+    </style>
+
+
+    <div class="container">
+        <h1>User Information</h1>
+        <div class="profile-header">
+            
+            <div class="info">
+                <h1>{{request.user.first_name}} {{request.user.last_name}}</h1>
+                {% comment %} <h2>Web Developer and Designer</h2>
+                <div class="ranking">RANKINGS: <strong>8/10</strong></div> {% endcomment %}
+            </div>
+        </div>
+
+        
+
+        <div class="tabs">
+            <a href="#about" class="active">My Orders</a>
+            
+        </div>
+        <a href="/profile">
+            <button class="edit-button">My Profile</button>
+        </a>
+        <a href="/myorder">
+            <button class="edit-button1">My Order</button>
+        </a>
+        
+        <div class="content order-history">
+            <h2>Order History</h2>
+            <table>
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                </tr>
+                {% for order in orderpaid %}
+                <tr>
+                    <td><img src="{{ order.p_id.pimage.url }}" alt="{{ order.p_id.pname }}"></td>
+                    <td>{{ order.p_id }}</td>
+                    <td>${{ order.amt }}</td>
+                </tr>  
+                {% endfor %}  
+            </table>
+        </div>
+    </div>
+
+{% endblock main %}

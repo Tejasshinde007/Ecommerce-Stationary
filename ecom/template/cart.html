@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block main %}
+
+<div class="basket-container">
+  {% if text %}{{text}}{% endif %}
+  <div class="basket-items">
+       {% for i in carts %}
+      <div class="basket-item">
+          <img src="{{i.pid.pimage.url}}" alt="Item Image" class="item-image">
+          <div class="item-details">
+              <h3>{{i.pid.pname}}</h3>
+              {% if i.pid.category == 1 %}
+              <p class="card-text">  <strong>Category:</strong>  Storybooks  </p>
+              {% elif i.pid.category == 2 %}
+              <p class="card-text">  <strong>Category:</strong>  Biography  </p>
+              {% elif i.pid.category == 3 %}
+              <p class="card-text">  <strong>Category:</strong>  Lkg1  </p>
+              {% elif i.pid.category == 4 %}
+              <p class="card-text">  <strong>Category:</strong>  Firsttofifth  </p>
+              {% elif i.pid.category == 5 %}
+              <p class="card-text">  <strong>Category:</strong>  Sixthtotenth  </p>
+              {% elif i.pid.category == 6 %}
+              <p class="card-text">  <strong>Category:</strong>  Writting Instruments  </p>
+              {% endif %}
+              <p><strong>Price:₹</strong> {{i.pid.offer_price}} <del>₹{{i.pid.price}}</del> (50% off)</p>
+              <div class="quantity">
+                <label for="qty">Quantity</label><a href="/updateqty/1/{{i.id}}/"><button class="qty-btn">+</button></a><input type="number" value="{{i.qty}}" style="height: 28px; width:50px;"><a href="/updateqty/0/{{i.id}}/"><button class="qty-btn">-</button></a>
+                  
+              </div>
+          </div>
+          <div class="item-price">
+              <p>₹{{i.pid.offer_price}}</p>
+          </div>
+          <a href="/delete/{{i.id}}"><button class="remove-item">✖</button></a>
+      </div>
+      {% endfor %}
+  </div>
+
+  {% if items >= 1 %} 
+
+  <div class="basket-summary-container">
+      <div class="basket-summary">
+          <div class="totals">
+              <p>Total Items: <span>{{items}}</span></p>
+              <p class="total">Total:<span>₹{{total}}</span></p>
+              <p>Saving amount: <span>₹{{saving}}</span></p>
+          </div>
+      </div>
+      <a href="/checkaddress"><button type="button" class="checkout-btn">Checkout</button></a>
+      
+  </div>
+  {% endif %}
+</div>
+  
+{% endblock main %}

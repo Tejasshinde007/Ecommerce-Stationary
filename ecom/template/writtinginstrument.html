@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static '{css/home.css}' %}">
+{% endblock css %}
+
+{% block main %}
+
+<h1>Writting Instruments</h1>
+<div class="container2">
+    {% for i in writting %} 
+    <div class="homepro">
+        <img src="{{i.pimage.url}}">
+            <p style="font-weight: bold;">{{i.pname}}</p>
+            <a href="/product_details/{{i.id}}/"><button>ADD TO CART</button></a>
+            <h2>Price: ₹{{i.offer_price}}</h2>
+    </div>
+    {% endfor %}
+    </div>
+  
+  
+  
+  
+      </div><br><br><br><br>
+
+{% endblock main %}

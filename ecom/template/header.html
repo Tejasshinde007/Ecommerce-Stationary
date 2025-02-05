@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    
+    <div>
+        <nav>
+            <ul>
+                <li class="logo">
+                    <img src="{% static 'images/logo.png' %}" alt="CEEPIN Logo">
+                </li>
+                <li><a href="/">Home</a></li>
+                <div class="dropdown">
+                    <a href="/storybook/1/" class="dropbtn">Shop</a>
+                    <div class="dropdown-content">
+                        <a href="/storybook/1/">Books</a>
+                        <a href="/lkgukg/3/">School Books</a>
+                        <a href="/writtinginstruments/6/">Writting Instruments</a>
+                    </div>
+                </div>
+                <li><a href="/aboutus">About Us</a></li>
+                {% if request.user.is_authenticated %}
+                  
+                    <div class="dropdown">
+                        <a href="/login" class="dropbtn"><i class="fa fa-fw fa-user"></i>Welcome {{request.user.username}}!</a>
+                        <div class="dropdown-content">
+                            <a href="/logout"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
+                            <a href="/profile" class="dropbtn"><i class="fa fa-fw fa-user"></i>User</a>
+                        </div>
+                    </div>
+                {% else %}
+                <li><a href="/login" class="dropbtn"><i class="fa fa-fw fa-user"></i>Login</a></li>
+                <li><a href="/register">Register</a></li>
+                {% endif %}
+                <li><a href="/cart">Cart</a></li>
+                <form method="get" action="{% url 'search' %}">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search..." name="query" id="query">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </div>
+                </form>
+                
+                
+            </ul>
+        </nav>
+    </div>

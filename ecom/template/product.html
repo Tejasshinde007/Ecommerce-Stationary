@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .product {
+        display: flex;
+        gap: 20px;
+    }
+
+    .product img {
+        
+            max-width: 100%;
+            height: auto;
+        
+    }
+
+    .product-details {
+        flex: 1;
+    }
+
+    .product-details h1 {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .product-details p {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .price {
+        font-size: 1.5em;
+        color: #E53935;
+        margin: 20px 0;
+    }
+
+    .add-to-cart {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: #fff;
+        text-decoration: none;
+        font-size: 1em;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .add-to-cart:hover {
+        background-color: #218838;
+        text-decoration: none;
+        color: #f9f9f9;
+    }
+  
+
+</style>
+<div class="container">
+    {% if error_msg %}
+      <div class="alert alert-danger">
+        {{error_msg}}
+      </div>
+      {% endif %}
+      {% if error_msg1 %}
+      <div class="alert alert-danger">
+        {{error_msg1}}
+      </div>
+      {% endif %}
+      {% if success %}
+        <div class="alert alert-success">
+          {{success}}
+        </div>
+      {% endif %}
+    {% for i in product %}
+    <div class="product">
+        <img src="{{i.pimage.url}}" alt="Product Image">
+        <div class="product-details">
+            <h1>{{i.pname}}</h1>
+            <p><strong>Category:</strong>{{i.category}}</p>
+            <p><strong>Description:</strong>{{i.description}}</p>
+            <p><strong>Price:</strong>{{i.price}}</p>
+            <div class="price">{{i.offer_price}}</div>
+            <a href="/addtocart/{{i.id}}" class="add-to-cart">Add to Cart</a>
+            <a href="/cart" class="add-to-cart">View Cart</a>
+            <a href="/" class="add-to-cart">Shop More</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+
+{% endblock main %}

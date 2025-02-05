@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        .fixed-background {
+            background-image: url('{% static "images/bgimage2.jpeg" %}');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div>
+        <nav>
+            <ul>
+                <li class="logo">
+                    <img src="{% static 'images/logo.png' %}" alt="CEEPIN Logo">
+                </li>
+                <li><a href="/">Home</a></li>
+                
+                <div class="dropdown">
+                    <a href="/storybook/1/" class="dropbtn">Shop</a>
+                    <div class="dropdown-content">
+                        <a href="/storybook/1/">Books</a>
+                        <a href="/lkgukg/3/">School Books</a>
+                        <a href="/writtinginstruments/6/">Writting Instruments</a>
+                    </div>
+                </div>
+                
+                <li><a href="/aboutus">About Us</a></li>
+                
+                {% if request.user.is_authenticated %}
+                  
+                    <div class="dropdown">
+                        <a href="/login" class="dropbtn"><i class="fa fa-fw fa-user"></i>Welcome {{request.user.username}}!</a>
+                        <div class="dropdown-content">
+                            <a href="/logout"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
+                            <a href="/profile" class="dropbtn"><i class="fa fa-fw fa-user"></i>User</a>
+                        </div>
+                    </div>
+                {% else %}
+                <li><a href="/login" class="dropbtn"><i class="fa fa-fw fa-user"></i>Login</a></li>
+                <li><a href="/register">Register</a></li>
+                {% endif %}
+                <li><a href="/cart">Cart</a></li>
+                <form method="get" action="{% url 'search' %}">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search..." name="query" id="query">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </div>
+                </form>
+                
+            </ul>
+        </nav>
+    </div>
+    <div class="fixed-background"></div>
+    
+    <div class="container">
+        <div class="centered">Shop Wide Range Of Stationary Items</div>
+      </div>
+        
+      <h1>BOOKS</h1><br><br><br><br>
+      <div class="container1">
+          <div class="cat">
+              <img src="{% static 'images/history.jpg' %}" alt="opp">
+              <h2>History</h2>
+          </div>
+          <div class="cat">
+              <img src="{% static 'images/moralstories.jpg' %}" alt="opp">
+              <h2>Moral Stories</h2>
+              
+          </div>
+          <div class="cat">
+              <img src="{% static 'images/englishbook.webp' %}" alt="opp">
+              <h2>English Books</h2>
+
+          </div>
+          <div class="cat">
+              <img src="{% static 'images/notebook.webp' %}" alt="opp">
+              <h2>Notebooks</h2>
+             
+          </div>
+         
+           
+         
+  
+  
+  
+  
+      </div><br><br><br><br><br><br><br><br><br><br>
+
+      
+      
+
+
+    <h1>CATEGORY</h1><br><br><br><br>
+    <div class="container1">
+        <div class="cat">
+            <img src="{% static 'images/pen.jpg' %}" alt="opp">
+            <h2>Correction Materials</h2>
+            <p>-Pens & Pencils<br>
+                -Markers & Dry Erase<br>
+                -Highlighters</p>
+        </div>
+        <div class="cat">
+            <img src="{% static 'images/paper.jpg' %}" alt="opp">
+            <h2>Paper</h2>
+            <p>-Copy & Multi-use Paper<br>
+                -Notebooks, Pads & Filler Paper<br>
+                -Brochures & Specialty Paper
+                
+                </p>
+        </div>
+        <div class="cat">
+            <img src="{% static 'images/scissors.jpg' %}" alt="opp">
+            <h2>General Supplies</h2>
+            <p>-Rulers & Paper Trimmers<br>
+                -Glue & Adhesives Clips<br>
+                -Tacks & Stapler Accessories</p>
+        </div>
+        <div class="cat">
+            <img src="{% static 'images/board.webp' %}" alt="opp">
+            <h2>Boards</h2>
+            <p>-Easels<br>
+                -Boards<br>
+                -Board Accessones</p>
+        </div>
+       
+         
+       
+
+
+
+
+    </div><br><br><br><br><br><br><br><br><br><br>
+
+    <h1>PRODUCTS</h1><br><br><br><br>
+    <div class="container2"> 
+        <div class="homepro">
+            <img src="{% static 'images/paper.jpg' %}">
+                <p style="font-weight: bold;">Papers</p><br><br>
+                <a href="/writtinginstruments/6/"><button>GO TO SHOP</button></a>
+                <h2>Price: 25$</h2>
+        </div>
+        <div class="homepro">
+            <img src="{% static 'images/pen.jpg' %}">
+            <p style="font-weight: bold;">Pens</p><br>
+            <a href="/writtinginstruments/6/"><button>GO TO SHOP</button></a>
+            <h2>Price: 30$</h2>
+        </div>
+        <div class="homepro">
+            <img src="{% static 'images/wordsbook.png' %}">
+            <p style="font-weight: bold;">WordsBook</p>
+            <a href="/lkgukg/3/"><button>GO TO SHOP</button></a>
+            <h2>Price: 20$</h2>
+        </div> 
+        <div class="homepro">
+            <img src="{% static 'images/schoolbook.jpeg' %}">
+            <p style="font-weight: bold;">School Books</p>
+            <a href="/lkgukg/3/"><button>GO TO SHOP</button></a>
+            <h2>Price: 40$</h2>
+        </div>
+        {% comment %} <div class="homepro">
+            <img src="{% static 'images/Casio_calculator.jpg' %}">
+            <p style="font-weight: bold;">Calculators</p>
+            <a href="shop.html"><button>GO TO SHOP</button></a>
+            <h2>Price: 50$</h2>
+        </div>  {% endcomment %}
+
+
+        </div><br><br><br><br><br><br><br><br><br><br>
+
+        <h1>SERVICES</h1><br><br><br><br>
+        <div class="container1">
+            <div class="cat">
+                <img src="{% static 'images/Ink & Toner Refilling image.jpeg' %}" alt="opp">
+                <h2>Ink & Toner Refilling</h2>
+                <p>Refilling ink cartridges and printer toner for customers.</p><br>
+                <a href="#"><button>Enquire Now</button></a>
+            </div>
+            <div class="cat">
+                <img src="{% static 'images/Custom Printing Services images.jpg' %}" alt="opp">
+                <h2>Custom Printing Services</h2>
+                <p>Business cards, flyers, brochures, posters, and other printed materials.</p><br>
+                <a href="#"><button>Enquire Now</button></a>
+            </div>
+            <div class="cat">
+                <img src="{% static 'images/File Organization & Storage Solutions.jpeg' %}" alt="opp">
+                <h2>File Organization & Storage Solutions</h2>
+                <p>Offering file folders, organizers, binders, and other storage solutions.</p>
+                <a href="#"><button>Enquire Now</button></a>
+            </div>
+            <div class="cat">
+                <img src="{% static 'images/Photo Printing & Framing.jpg' %}" alt="opp">
+                <h2>Photo Printing & Framing</h2>
+                <p>Offering photo printing and framing services for home or office decor.</p><br>
+                <a href="#"><button>Enquire Now</button></a>
+            </div>
+           
+             
+           
+    
+    
+    
+    
+        </div><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+        <section class="about-section">
+            <div class="container">
+                <div class="about-content">
+                    <img src="{% static 'images/homeabout.jpg' %}" alt="Stationery Shop" class="about-image">
+                    <div class="text-content">
+                        <h2>About Us</h2>
+                        <p>Welcome to our stationery shop! We provide high-quality office supplies, custom printing services, and much more to help you stay organized and productive. Our mission is to offer a wide range of products that cater to your business and personal needs, ensuring convenience, affordability, and reliability for all our customers.</p>
+                        <p>We take pride in offering friendly customer service and helping you find the perfect products to suit your needs. Whether you're looking for pens, paper, or custom-designed stationery, we've got you covered!</p>
+                    </div>
+                </div>
+            </div>
+        </section><br><br><br><br><br><br><br><br><br><br>
+    
+        
+    <h1>SHOP BY BRANDS</h1><br><br><br><br>
+    <div class="Brands">
+        <img src="{% static 'images/classmate.jpeg' %}" alt="oop">
+        <img src="{% static 'images/Doms.png' %}" alt="oop">
+        <img src="{% static 'images/navneet.jpg' %}" alt="oop">
+        <img src="{% static 'images/renolds.jpg' %}" alt="oop">
+        <img src="{% static 'images/camlin.jpg' %}" alt="oop">
+    </div><br><br><br><br><br><br>
+
+
+    <footer style="background-color: #f4f4f4; padding: 20px; border-top: 1px solid #ddd; text-align: center;">
+        <div style="max-width: 1200px; margin: auto;">
+            <!-- Contact Information -->
+            <div style="margin-bottom: 15px;">
+                <h4 style="margin: 0;">Contact Us</h4>
+                <p style="margin: 5px 0;">📍 Address: Hari Om, Kolpewadi, India</p>
+                <p style="margin: 5px 0;">📞 Phone: +8600333435</p>
+                <p style="margin: 5px 0;">✉️ Email: hariomgeneralstore@gamil.com</p>
+            </div>
+    
+            <!-- Social Media Links -->
+            <div style="margin-bottom: 15px;">
+                <h4 style="margin: 0;">Follow Us</h4>
+                <a href="#" style="margin: 0 5px;">Facebook</a> |
+                <a href="#" style="margin: 0 5px;">Instagram</a> |
+                <a href="#" style="margin: 0 5px;">Twitter</a>
+            </div>
+    
+            <!-- Quick Links -->
+            <div style="margin-bottom: 15px;">
+                <h4 style="margin: 0;">Quick Links</h4>
+                <a href="/about-us" style="margin: 0 5px;">About Us</a> |
+                <a href="/shop" style="margin: 0 5px;">Shop</a> |
+                <a href="/contact" style="margin: 0 5px;">Contact</a>
+            </div>
+    
+            <!-- Copyright -->
+            <div style="margin-top: 10px;">
+                <p style="font-size: 14px; color: #555;">&copy; 2024 Stationery Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    
+</body>
+</html>
+
