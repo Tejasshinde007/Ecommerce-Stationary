@@ -97,6 +97,9 @@ def register(request):
         if un=="" or e=="" or p=="" or cp=="" or fn=="" or ln=="":
             context['error_msg']="All fields are required"
             return render(request,"register.html",context)
+        elif not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", e):
+            context['error_msg'] = "Invalid email format"
+            return render(request, "register.html", context)
         elif p!=cp:
             context['error_msg']="Password Dosent match"
             return render(request,"register.html",context)
@@ -150,13 +153,7 @@ def product_details(request,pid):
 
 
    
-# def viewcart(request):
-#     print("hello")
-#     context={}
-#     carts=Cart.objects.filter(userid=request.user.id)
-#     context['carts']=carts
-#     print(carts)
-#     return render(request,'cart.html',context)
+
  
 def viewcart(request):
     context={}
@@ -174,7 +171,6 @@ def viewcart(request):
     context['saving']=saving_amt
     context['total']=total_amt
     context['items']=items    # we have change this for the items 
-    # context['items']=len(carts)
     
     # till here we have added
     
