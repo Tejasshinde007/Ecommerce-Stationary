@@ -36,6 +36,7 @@ class Order(models.Model):
     qty=models.IntegerField(default=1)
     amt=models.FloatField()
     payment_status=models.CharField(max_length=20,default="unpaid")
+    payment_date = models.DateTimeField(null=True, blank=True)  # Track payment time
     # if we want to return the character value to the admin interface and user interface
     def __str__(self):
         return self.order_id

@@ -11,6 +11,7 @@ from django.core.mail import send_mail# for email intrgration
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.utils.timezone import now
 # Create your views here.
 
 def home(request):
@@ -211,13 +212,31 @@ def checkaddress(request):
             st=request.POST["state"]
             zp=request.POST["zipcode"]
             mob=request.POST["mobile"]
-            if re.match("[6-9]\d{9}",mob):
+            if not all([fn, ad, ct, st, zp, mob]):
+                context['error_msg'] = "All fields are required."
+                return render(request, "address.html", context)
+
+            # Validate full name (only letters and spaces allowed)
+            if not re.fullmatch(r"[A-Za-z\s]+", fn):
+                context['error_msg'] = "Full Name must contain only alphabets."
+                return render(request, "address.html", context)
+
+            # Validate mobile number (10-digit, starting with 6-9)
+            if not re.fullmatch(r"[6-9]\d{9}", mob):
+                context['error_msg'] = "Invalid Mobile Number. Enter a valid 10-digit number."
+                return render(request, "address.html", context)
+
+            # Validate pincode (6-digit numeric)
+            if not re.fullmatch(r"\d{6}", zp):
+                context['error_msg'] = "Invalid Zipcode. It should be a 6-digit number."
+                return render(request, "address.html", context)
+            
+            else:
                 address=Address.objects.create(user_id=u[0],fullname=fn,address=ad,city=ct,state=st,pincode=zp,mobile=mob)
                 address.save()
                 return redirect('/placeorder')
-            else:
-                context['error_msg']="Incorrect Mobile Number"
-                return render(request,"address.html",context)
+                
+            
         
         else:
             return render(request,"address.html")
@@ -293,10 +312,12 @@ def makepayment(request):
 # Email integration
 def email_send(request):
     user_email = request.user.email  # Fetch the logged-in user's email
-    
+    u=User.objects.filter(id=request.user.id)
     # Fetch paid orders for the user
-    paidorders = Order.objects.filter(id=request.user.id)
-
+    q1=Q(user_id=u[0])
+    q2=Q(payment_status="paid")
+    paidorders=Order.objects.filter(q1&q2).order_by('-payment_date')
+    
     if not paidorders.exists():
         return redirect('/update_order_status')  # Redirect if no paid orders
 
@@ -308,6 +329,7 @@ def email_send(request):
     message = render_to_string('email.html', {
         'customer_name': request.user.username,  
         'orders': paidorders  # Pass order details to the template
+        
     })
 
     # Send the email
@@ -322,7 +344,7 @@ def update_order_status(request):
     q1=Q(user_id=u[0])
     q2=Q(payment_status="unpaid")
     orders=Order.objects.filter(q1&q2)
-    orders.update(payment_status="paid")
+    orders.update(payment_status="paid",payment_date=now())
     
     return redirect("/")
 
@@ -350,7 +372,7 @@ def delete_user(request, uid):
 def myorder(request):
     context = {}
     paid_orders = Order.objects.filter(user_id=request.user.id)
-    print(paid_orders)  
+    # print(paid_orders)  
     context["orderpaid"] = paid_orders
 
     return render(request, "myorder.html", context)
