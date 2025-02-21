@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate,login,logout
 import re
 import random
 import razorpay
-from django.core.mail import send_mail# for email intrgration
+from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.template.loader import render_to_string
@@ -98,12 +98,31 @@ def register(request):
         if un=="" or e=="" or p=="" or cp=="" or fn=="" or ln=="":
             context['error_msg']="All fields are required"
             return render(request,"register.html",context)
+        
+        elif not re.match(r"^[a-zA-Z0-9_.@-]{3,20}$", un):
+            context['error_msg'] = "Username must be 3-20 characters long and can include letters, numbers, underscores (_), hyphens (-), periods (.), and at symbol (@)"
+            return render(request, "register.html", context)
+        
+        elif not re.match(r"^[A-Za-z]{2,}$", fn):
+            context['error_msg'] = "First name must contain only letters and be at least 2 characters long"
+            return render(request, "register.html", context)
+        
+        elif not re.match(r"^[A-Za-z]{2,}$", ln):
+            context['error_msg'] = "Last name must contain only letters and be at least 2 characters long"
+            return render(request, "register.html", context)
+        
         elif not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", e):
             context['error_msg'] = "Invalid email format"
             return render(request, "register.html", context)
+        
+        elif not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':\"\\|,.<>\/?]).{8,}$", p):
+            context['error_msg'] = "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+            return render(request, "register.html", context)
+        
         elif p!=cp:
             context['error_msg']="Password Dosent match"
             return render(request,"register.html",context)
+        
         elif len(p)< 8:
             context["error_msg"]="Password contain atlest 8 character"
             return render(request,"register.html",context)
@@ -127,13 +146,13 @@ def addtocart(request,pid):
     product=Product.objects.filter(id=pid)
     context['product']=product
     if request.user.is_authenticated:
-        u=User.objects.filter(id=request.user.id)  # we are take the data of the user from server if user is login(we are taking the user id )
+        u=User.objects.filter(id=request.user.id)  
         p=Product.objects.filter(id=pid)
         print(u[0],p[0])
-        q1=Q(userid=u[0])     # we have taken the userid
-        q2=Q(pid=p[0])        # we have taken product 
-        cart=Cart.objects.filter(q1 & q2)   #here we are satisfying both conditions bcz it will check the user and the product should be of same user bcz ther are many user  if we dont provide it multiple user add the product in cart it will all show in the same cart not for specific user
-        if len(cart)==1:                    # here if the cart have the same product in the cart it raise error mention below
+        q1=Q(userid=u[0])     
+        q2=Q(pid=p[0])       
+        cart=Cart.objects.filter(q1 & q2)   
+        if len(cart)==1:                   
             context['error_msg']="Product already exist in cart"
             return render(request,'product.html',context)
         else:
@@ -143,7 +162,7 @@ def addtocart(request,pid):
             # print(cart)
             return render(request,'product.html',context)
     else:                               
-        context['error_msg1']="Please login first"    # it will not redirect to login page it will popup the message alert please login first
+        context['error_msg1']="Please login first"    
         return render(request,'product.html',context)
 
 def product_details(request,pid):
@@ -160,21 +179,18 @@ def viewcart(request):
     context={}
     carts=Cart.objects.filter(userid=request.user.id)
     
-    # we have add the total items amount and offered price int he cart section
     saving_amt=0
     total_amt=0
     items=0
     for cart in carts:
-        saving_amt+=(cart.pid.price - cart.pid.offer_price) * cart.qty  # this cvanges for the saving price
-        total_amt+=cart.pid.offer_price * cart.qty  # we have make the changes for the updation of the price when quantity incereses *cart.qty this changes we have done
-        items+=cart.qty     # we have ins=creases the items in the price details
-    # print(saving_amt,total_amt)
+        saving_amt+=(cart.pid.price - cart.pid.offer_price) * cart.qty  
+        total_amt+=cart.pid.offer_price * cart.qty  
+        items+=cart.qty     
+   
     context['saving']=saving_amt
     context['total']=total_amt
-    context['items']=items    # we have change this for the items 
-    
-    # till here we have added
-    
+    context['items']=items    
+     
     
     if len(carts)==0:
         context['text']="No items in cart"
@@ -244,31 +260,28 @@ def checkaddress(request):
 def placeorder(request):
     carts=Cart.objects.filter(userid=request.user.id)
     for i in carts:
-        oid=random.randint(1111,9999)  # we have use ramdom module for the order id
-        totalamt=i.pid.offer_price*i.qty    # here multiply price into quantity
-        order=Order.objects.create(order_id=oid,user_id=i.userid,p_id=i.pid,amt=totalamt,qty=i.qty)  #here user_id(it is from the Order table)=i.userid(it is from the cart table) we are
+        oid=random.randint(1111,9999)  
+        totalamt=i.pid.offer_price*i.qty   
+        order=Order.objects.create(order_id=oid,user_id=i.userid,p_id=i.pid,amt=totalamt,qty=i.qty)  
         order.save()
     return redirect('/fetchorder')
         
 
 def fetchorder(request):
     context={}
-    # here we have filter the user id and then fetch the data of the specific bcz if the admin login it wont display the admin data
+   
     u=User.objects.filter(id=request.user.id)
     carts=Cart.objects.filter(userid=request.user.id)
     address=Address.objects.filter(user_id=u[0])
     q1=Q(user_id=u[0])
     q2=Q(payment_status="unpaid")
     orders=Order.objects.filter(q1&q2)
-    # we have add the total items amount and offered price int he cart section
+    
     saving_amt=0
     total_amt=0
     items=0
     for cart in carts:
-        saving_amt+=(cart.pid.price - cart.pid.offer_price) * cart.qty  # this changes for the saving price
-    #     total_amt+=cart.pid.offer_price * cart.qty  # we have make the changes for the updation of the price when quantity incereses *cart.qty this changes we have done
-    #     items+=cart.qty     # we have ins=creases the items in the price details
-    # print(saving_amt,total_amt)
+        saving_amt+=(cart.pid.price - cart.pid.offer_price) * cart.qty  
     for i in orders:
         total_amt+=i.amt
         items+=i.qty
@@ -285,8 +298,8 @@ def makepayment(request):
     context={}
     u=User.objects.filter(id=request.user.id)
     carts=Cart.objects.filter(userid=request.user.id)
-    client=razorpay.Client(auth=("rzp_test_WbIobfpNgPbwWC","GIPFE5y9tfnQKAPjGMMSD30n")) #it check the person is authenticated or not
-    # orders=Order.objects.filter(user_id=u[0])
+    client=razorpay.Client(auth=("rzp_test_WbIobfpNgPbwWC","GIPFE5y9tfnQKAPjGMMSD30n")) 
+   
     q1=Q(user_id=u[0])
     q2=Q(payment_status="unpaid")
     orders=Order.objects.filter(q1&q2)
@@ -309,32 +322,32 @@ def makepayment(request):
     context['items']=items
     return render(request,'pay.html',context)
 
-# Email integration
+
 def email_send(request):
-    user_email = request.user.email  # Fetch the logged-in user's email
+    user_email = request.user.email  
     u=User.objects.filter(id=request.user.id)
-    # Fetch paid orders for the user
+   
     q1=Q(user_id=u[0])
     q2=Q(payment_status="paid")
     paidorders=Order.objects.filter(q1&q2).order_by('-payment_date')
     
     if not paidorders.exists():
-        return redirect('/update_order_status')  # Redirect if no paid orders
+        return redirect('/update_order_status')  
 
-    # Email subject and sender details
+   
     subject = "Your Order History"
     from_email = "tejasshinde5156@gmail.com"
 
-    # Render the HTML email template with order details
+   
     message = render_to_string('email.html', {
         'customer_name': request.user.username,  
-        'orders': paidorders  # Pass order details to the template
+        'orders': paidorders  
         
     })
 
-    # Send the email
+   
     email = EmailMessage(subject, message, from_email, [user_email])
-    email.content_subtype = "html"  # Ensure the email is sent as HTML
+    email.content_subtype = "html"  
     email.send()
 
     return redirect('/update_order_status')
@@ -356,12 +369,12 @@ def search(request):
     return render(request,"search.html",context)
 
 def userinfo(request):
-    context = {"profile": [request.user]}  # Pass only the logged-in user's data
+    context = {"profile": [request.user]}  
     return render(request, "profile.html", context)
 
 
 def delete_user(request, uid):
-    if request.user.id == uid:  # Check if the user ID matches the logged-in user
+    if request.user.id == uid: 
         u=User.objects.get(id=request.user.id)
         u.delete()
         print("deleted user")
@@ -372,7 +385,7 @@ def delete_user(request, uid):
 def myorder(request):
     context = {}
     paid_orders = Order.objects.filter(user_id=request.user.id)
-    # print(paid_orders)  
+   
     context["orderpaid"] = paid_orders
 
     return render(request, "myorder.html", context)
